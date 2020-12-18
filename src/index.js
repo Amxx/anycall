@@ -26,7 +26,7 @@ const formatResult                            = require('./utils/formatResult.js
 	const { artefact } = await prompts({
 		type: 'text',
 		name: 'artefact',
-		message: 'Where is the truffle artefact',
+		message: 'Path to artefact',
 		validate: fs.existsSync,
 		format: path => JSON.parse(fs.readFileSync(path)),
 		initial: 'example/TimelockController.json',
@@ -42,7 +42,7 @@ const formatResult                            = require('./utils/formatResult.js
 	const { selector } = await prompts({
 		type: 'select',
 		name: 'selector',
-		message: 'Function to call',
+		message: 'Select function',
 		choices: Object.keys(abi.functions).map(value => ({ value })),
 	});
 	if (abi.functions[selector] == undefined) { throw 'Aborted'; }
@@ -78,7 +78,7 @@ const formatResult                            = require('./utils/formatResult.js
 	const { provider } = await prompts([{
 		type: 'select',
 		name: 'provider',
-		message: 'Select your blockchain',
+		message: 'Select chain',
 		choices: [
 			{ value: 'mainnet'                      },
 			{ value: 'rinkeby'                      },
@@ -92,7 +92,7 @@ const formatResult                            = require('./utils/formatResult.js
 	},{
 		type: (_, { provider }) => !provider && 'text',
 		name: 'provider',
-		message: 'Enter blockchain endpoint',
+		message: 'Custom endpoint',
 		initial: process.env.CHAIN,
 		validate: isUrl,
 		format: endpoint => new JsonRpcProvider(endpoint),
@@ -129,7 +129,7 @@ const formatResult                            = require('./utils/formatResult.js
 	const { signer } = await prompts([{
 		type: !readonly && 'select',
 		name: 'signer',
-		message: 'Select your wallet type',
+		message: 'Select wallet',
 		choices: [
 			{ title: 'Private key',    value: 'wallet'                                                    },
 			{ title: 'JsonRpc signer', value: 'jsonrpc', disabled: !(provider instanceof JsonRpcProvider) },
@@ -138,14 +138,14 @@ const formatResult                            = require('./utils/formatResult.js
 	},{
 		type: (_, { signer }) => signer == 'wallet' && 'text',
 		name: 'signer',
-		message: 'Private key of the wallet',
+		message: 'Private key',
 		initial: process.env.MNEMONIC,
 		validate: pk => /^0x[0-9a-z]{64}$/.exec(pk),
 		format: (pk, { provider }) => new Wallet(pk, provider),
 	},{
 		type: (_, { signer }) => signer == 'jsonrpc' && 'number',
 		name: 'signer',
-		message: 'Index of the account',
+		message: 'Index',
 		initial: 0,
 		min: 0,
 		format: (index, { provider }) => provider.getSigner(index),

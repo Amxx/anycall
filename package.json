@@ -1,6 +1,6 @@
 {
   "name": "@amxx/anycall",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An interractive smart contract encoder and sender",
   "author": "Hadrien Croubois (@Amxx)",
   "license": "MIT",
