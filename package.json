@@ -8,9 +8,20 @@
   "scripts": {
     "start": "node src/index.js"
   },
+  "homepage": "https://github.com/Amxx/anycall.git#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Amxx/anycall.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Amxx/anycall.git/issues"
+  },
   "dependencies": {
     "@ethersproject/abi": "^5.0.9",
+    "@ethersproject/address": "^5.0.8",
+    "@ethersproject/bignumber": "^5.0.12",
     "@ethersproject/contracts": "^5.0.8",
+    "@ethersproject/hash": "^5.0.9",
     "@ethersproject/providers": "^5.0.17",
     "is-url": "^1.2.4",
     "prompts": "^2.4.0",
