@@ -1,0 +1,19 @@
+{
+  "name": "@amxx/anycall",
+  "version": "0.0.1",
+  "description": "An interractive smart contract encoder and sender",
+  "author": "Hadrien Croubois (@Amxx)",
+  "license": "MIT",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@ethersproject/abi": "^5.0.9",
+    "@ethersproject/contracts": "^5.0.8",
+    "@ethersproject/providers": "^5.0.17",
+    "is-url": "^1.2.4",
+    "prompts": "^2.4.0",
+    "yargs": "^16.2.0"
+  }
+}
