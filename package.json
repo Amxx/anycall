@@ -1,14 +1,14 @@
 {
   "name": "@amxx/anycall",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An interractive smart contract encoder and sender",
   "author": "Hadrien Croubois (@Amxx)",
   "license": "MIT",
   "main": "src/index.js",
-  "scripts": {
-    "start": "node src/index.js"
-  },
   "homepage": "https://github.com/Amxx/anycall.git#readme",
+  "bin": {
+    "anycall-cli": "src/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Amxx/anycall.git"
