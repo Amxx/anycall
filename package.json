@@ -1,6 +1,6 @@
 {
   "name": "@amxx/anycall",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An interractive smart contract encoder and sender",
   "author": "Hadrien Croubois (@Amxx)",
   "license": "MIT",
@@ -18,11 +18,15 @@
   },
   "dependencies": {
     "@ethersproject/abi": "^5.0.9",
+    "@ethersproject/abstract-signer": "^5.0.9",
     "@ethersproject/address": "^5.0.8",
     "@ethersproject/bignumber": "^5.0.12",
     "@ethersproject/contracts": "^5.0.8",
+    "@ethersproject/hardware-wallets": "^5.0.11",
     "@ethersproject/hash": "^5.0.9",
+    "@ethersproject/hdnode": "^5.0.7",
     "@ethersproject/providers": "^5.0.17",
+    "@ethersproject/wallet": "^5.0.9",
     "is-url": "^1.2.4",
     "prompts": "^2.4.0",
     "yargs": "^16.2.0"

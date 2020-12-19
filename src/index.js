@@ -7,13 +7,16 @@ const isUrl                                   = require('is-url');
 const prompts                                 = require('prompts');
 const yargs                                   = require('yargs');
 const { Interface                           } = require('@ethersproject/abi');
+const { Signer                              } = require('@ethersproject/abstract-signer');
 const { isAddress                           } = require('@ethersproject/address');
 const { Contract                            } = require('@ethersproject/contracts');
+const { LedgerSigner                        } = require('@ethersproject/hardware-wallets');
 const { isValidName                         } = require('@ethersproject/hash');
+const { isValidMnemonic, defaultPath        } = require('@ethersproject/hdnode');
 const { getDefaultProvider, JsonRpcProvider } = require('@ethersproject/providers');
+const { Wallet                              } = require('@ethersproject/wallet');
 const getFunctionArgs                         = require('./utils/getParams.js');
 const formatResult                            = require('./utils/formatResult.js');
-
 
 (async () => {
 
@@ -132,6 +135,7 @@ const formatResult                            = require('./utils/formatResult.js
 		message: 'Select wallet',
 		choices: [
 			{ title: 'Private key',    value: 'wallet'                                                    },
+			{ title: 'Mnemonic',       value: 'mnemonic'                                                  },
 			{ title: 'JsonRpc signer', value: 'jsonrpc', disabled: !(provider instanceof JsonRpcProvider) },
 			{ title: 'Ledger',         value: 'ledger'                                                    },
 		],
@@ -141,22 +145,33 @@ const formatResult                            = require('./utils/formatResult.js
 		message: 'Private key',
 		initial: process.env.MNEMONIC,
 		validate: pk => /^0x[0-9a-z]{64}$/.exec(pk),
-		format: (pk, { provider }) => new Wallet(pk, provider),
+		format: pk => new Wallet(pk, provider),
+	},{
+		type: (_, { signer }) => signer == 'mnemonic' && 'text',
+		name: 'mnemonic',
+		message: 'Mnemonic',
+		validate: isValidMnemonic,
+	},{
+		type: (_, { signer }) => signer == 'mnemonic' && 'text',
+		name: 'signer',
+		message: 'Path',
+		initial: defaultPath,
+		format: (path, { mnemonic }) => Wallet.fromMnemonic(mnemonic, path).connect(provider),
 	},{
 		type: (_, { signer }) => signer == 'jsonrpc' && 'number',
 		name: 'signer',
 		message: 'Index',
 		initial: 0,
 		min: 0,
-		format: (index, { provider }) => provider.getSigner(index),
+		format: index => provider.getSigner(index),
 	},{
 		type: (_, { signer }) => signer == 'ledger' && 'text',
 		name: 'signer',
 		message: 'Path',
-		initial: 'm/44\'/60\'/0\'/0/0',
-		format: (path, { provider }) => new LedgerSigner(provider, 'hid', path),
+		initial: defaultPath,
+		format: path => new LedgerSigner(provider, 'hid', path),
 	}]);
-	if (!readonly && signer == undefined) { throw 'Aborted'; }
+	if (!readonly && !signer instanceof Signer) { throw 'Aborted'; }
 
 	/****************************************************************************
 	 *                                 Execute                                  *
@@ -177,7 +192,7 @@ const formatResult                            = require('./utils/formatResult.js
 			// TODO, add value
 		case 'nonpayable':
 			const tx      = await contract.connect(signer)[selector](...params);
-			const receipt = await tx.await();
+			const receipt = await tx.wait();
 			console.log({ receipt });
 			break;
 	}
